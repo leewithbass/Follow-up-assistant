@@ -20,7 +20,6 @@ dotnet build FloatBrowser.sln -c Release -p:Platform=x64
 ## 目录
 
 - `src/FloatBrowser.App`：WPF 应用
-- `tests/FloatBrowser.Tests`：单元测试
 
 ## 配置与数据
 
