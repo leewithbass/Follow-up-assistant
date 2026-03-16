@@ -1,0 +1,24 @@
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.31903.59
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FloatBrowser.App", "src\FloatBrowser.App\FloatBrowser.App.csproj", "{A1F7C8A1-6A6C-4A09-9B10-58D2C2E4AB11}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FloatBrowser.Tests", "tests\FloatBrowser.Tests\FloatBrowser.Tests.csproj", "{E6D3D3C5-8BB8-44E3-9C5A-6E0F31D57277}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{A1F7C8A1-6A6C-4A09-9B10-58D2C2E4AB11}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A1F7C8A1-6A6C-4A09-9B10-58D2C2E4AB11}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A1F7C8A1-6A6C-4A09-9B10-58D2C2E4AB11}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A1F7C8A1-6A6C-4A09-9B10-58D2C2E4AB11}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E6D3D3C5-8BB8-44E3-9C5A-6E0F31D57277}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E6D3D3C5-8BB8-44E3-9C5A-6E0F31D57277}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E6D3D3C5-8BB8-44E3-9C5A-6E0F31D57277}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E6D3D3C5-8BB8-44E3-9C5A-6E0F31D57277}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal

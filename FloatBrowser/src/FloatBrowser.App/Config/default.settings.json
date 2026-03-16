@@ -1,0 +1,22 @@
+{
+  "window": {
+    "width": 960,
+    "height": 600,
+    "topmost": true,
+    "borderless": true,
+    "opacity": 1.0
+  },
+  "browser": {
+    "homeUrl": "https://www.bing.com"
+  },
+  "hotkeys": {
+    "back": "Alt+Left",
+    "forward": "Alt+Right",
+    "refresh": "Ctrl+Alt+R",
+    "toggleVisibility": "Ctrl+Alt+Space",
+    "home": "Ctrl+Alt+H",
+    "playPauseMedia": "Ctrl+Alt+P",
+    "mouseXButton1": "PlayPauseMedia",
+    "mouseXButton2": "None"
+  }
+}
