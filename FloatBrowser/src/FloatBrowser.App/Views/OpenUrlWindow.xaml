@@ -1,0 +1,35 @@
+<Window x:Class="FloatBrowser.App.Views.OpenUrlWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="打开地址"
+        Height="156"
+        Width="520"
+        WindowStartupLocation="CenterOwner"
+        ResizeMode="NoResize">
+    <Grid Margin="14">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <TextBlock Text="输入网址"
+                   FontSize="14"
+                   FontWeight="SemiBold"/>
+        <TextBox x:Name="UrlTextBox"
+                 Grid.Row="1"
+                 Margin="0,10,0,0"
+                 MinWidth="420"
+                 KeyDown="OnUrlTextBoxKeyDown"/>
+        <StackPanel Grid.Row="2"
+                    Orientation="Horizontal"
+                    HorizontalAlignment="Right"
+                    Margin="0,14,0,0">
+            <Button Content="取消"
+                    Margin="0,0,8,0"
+                    Click="OnCancel"/>
+            <Button Content="打开"
+                    IsDefault="True"
+                    Click="OnOpen"/>
+        </StackPanel>
+    </Grid>
+</Window>

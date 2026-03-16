@@ -16,8 +16,6 @@ public partial class SettingsViewModel : ObservableObject
     [ObservableProperty] private string toggleVisibility = string.Empty;
     [ObservableProperty] private string home = string.Empty;
     [ObservableProperty] private string playPauseMedia = string.Empty;
-    [ObservableProperty] private string mouseXButton1 = string.Empty;
-    [ObservableProperty] private string mouseXButton2 = string.Empty;
     [ObservableProperty] private string homeUrl = string.Empty;
     [ObservableProperty] private string message = string.Empty;
 
@@ -38,20 +36,12 @@ public partial class SettingsViewModel : ObservableObject
             return;
         }
 
-        if (MouseXButton1 != "None" && MouseXButton2 != "None")
-        {
-            Message = "任意时刻只允许一个鼠标侧键绑定动作";
-            return;
-        }
-
         _config.Hotkeys.Back = Back;
         _config.Hotkeys.Forward = Forward;
         _config.Hotkeys.Refresh = Refresh;
         _config.Hotkeys.ToggleVisibility = ToggleVisibility;
         _config.Hotkeys.Home = Home;
         _config.Hotkeys.PlayPauseMedia = PlayPauseMedia;
-        _config.Hotkeys.MouseXButton1 = MouseXButton1;
-        _config.Hotkeys.MouseXButton2 = MouseXButton2;
         _config.Browser.HomeUrl = HomeUrl;
 
         await _settingsService.SaveAsync(_config);
@@ -77,8 +67,7 @@ public partial class SettingsViewModel : ObservableObject
         ToggleVisibility = _config.Hotkeys.ToggleVisibility;
         Home = _config.Hotkeys.Home;
         PlayPauseMedia = _config.Hotkeys.PlayPauseMedia;
-        MouseXButton1 = _config.Hotkeys.MouseXButton1;
-        MouseXButton2 = _config.Hotkeys.MouseXButton2;
         HomeUrl = _config.Browser.HomeUrl;
+        Message = string.Empty;
     }
 }

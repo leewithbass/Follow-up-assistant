@@ -9,15 +9,13 @@
         </Grid.RowDefinitions>
         <ScrollViewer>
             <StackPanel>
-                <TextBlock Text="后退快捷键"/><TextBox Text="{Binding Back}"/>
-                <TextBlock Text="前进快捷键"/><TextBox Text="{Binding Forward}"/>
-                <TextBlock Text="刷新快捷键"/><TextBox Text="{Binding Refresh}"/>
-                <TextBlock Text="显示/隐藏窗口快捷键"/><TextBox Text="{Binding ToggleVisibility}"/>
-                <TextBlock Text="主页快捷键"/><TextBox Text="{Binding Home}"/>
-                <TextBlock Text="播放/暂停快捷键"/><TextBox Text="{Binding PlayPauseMedia}"/>
-                <TextBlock Text="鼠标XButton1动作"/><ComboBox Text="{Binding MouseXButton1}" IsEditable="True" ItemsSource="{Binding MouseActions}"/>
-                <TextBlock Text="鼠标XButton2动作"/><ComboBox Text="{Binding MouseXButton2}" IsEditable="True" ItemsSource="{Binding MouseActions}"/>
-                <TextBlock Text="主页URL"/><TextBox Text="{Binding HomeUrl}"/>
+                <TextBlock Text="后退快捷键"/><TextBox Text="{Binding Back, UpdateSourceTrigger=PropertyChanged}"/>
+                <TextBlock Text="前进快捷键"/><TextBox Text="{Binding Forward, UpdateSourceTrigger=PropertyChanged}"/>
+                <TextBlock Text="刷新快捷键"/><TextBox Text="{Binding Refresh, UpdateSourceTrigger=PropertyChanged}"/>
+                <TextBlock Text="显示/隐藏窗口快捷键"/><TextBox Text="{Binding ToggleVisibility, UpdateSourceTrigger=PropertyChanged}"/>
+                <TextBlock Text="主页快捷键"/><TextBox Text="{Binding Home, UpdateSourceTrigger=PropertyChanged}"/>
+                <TextBlock Text="播放/暂停快捷键"/><TextBox Text="{Binding PlayPauseMedia, UpdateSourceTrigger=PropertyChanged}"/>
+                <TextBlock Text="主页URL"/><TextBox Text="{Binding HomeUrl, UpdateSourceTrigger=PropertyChanged}"/>
                 <TextBlock Text="{Binding Message}" Foreground="OrangeRed" Margin="0,6,0,0"/>
             </StackPanel>
         </ScrollViewer>

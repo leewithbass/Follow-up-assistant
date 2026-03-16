@@ -68,10 +68,58 @@ public class BrowserService : IBrowserService
         }
     }
 
-    public Task GoBackAsync() { if (CanGoBack) _webView?.CoreWebView2?.GoBack(); return Task.CompletedTask; }
-    public Task GoForwardAsync() { if (CanGoForward) _webView?.CoreWebView2?.GoForward(); return Task.CompletedTask; }
-    public Task RefreshAsync() { _webView?.CoreWebView2?.Reload(); return Task.CompletedTask; }
-    public Task StopAsync() { _webView?.CoreWebView2?.Stop(); return Task.CompletedTask; }
+    public Task GoBackAsync()
+    {
+        _ = _logger.LogInfoAsync($"Browser GoBack requested: canGoBack={CanGoBack}, hasCore={_webView?.CoreWebView2 is not null}");
+        if (_webView?.CoreWebView2 is null)
+        {
+            return Task.CompletedTask;
+        }
+
+        if (CanGoBack)
+        {
+            _webView.CoreWebView2.GoBack();
+            return Task.CompletedTask;
+        }
+
+        return ExecuteScriptWithLoggingAsync("history.back();", "Browser GoBack script fallback");
+    }
+
+    public Task GoForwardAsync()
+    {
+        _ = _logger.LogInfoAsync($"Browser GoForward requested: canGoForward={CanGoForward}, hasCore={_webView?.CoreWebView2 is not null}");
+        if (_webView?.CoreWebView2 is null)
+        {
+            return Task.CompletedTask;
+        }
+
+        if (CanGoForward)
+        {
+            _webView.CoreWebView2.GoForward();
+            return Task.CompletedTask;
+        }
+
+        return ExecuteScriptWithLoggingAsync("history.forward();", "Browser GoForward script fallback");
+    }
+
+    public Task RefreshAsync()
+    {
+        _ = _logger.LogInfoAsync($"Browser Refresh requested: hasCore={_webView?.CoreWebView2 is not null}, currentUrl={_webView?.Source}");
+        if (_webView?.CoreWebView2 is null)
+        {
+            return Task.CompletedTask;
+        }
+
+        _webView.CoreWebView2.Reload();
+        return ExecuteScriptWithLoggingAsync("window.location.reload();", "Browser Refresh script fallback");
+    }
+
+    public Task StopAsync()
+    {
+        _ = _logger.LogInfoAsync($"Browser Stop requested: hasCore={_webView?.CoreWebView2 is not null}");
+        _webView?.CoreWebView2?.Stop();
+        return Task.CompletedTask;
+    }
     public Task GoHomeAsync() => NavigateAsync(_config.Browser.HomeUrl);
     public Task<string> GetCurrentUrlAsync() => Task.FromResult(_webView?.Source?.ToString() ?? string.Empty);
     public Task<string> GetCurrentTitleAsync() => Task.FromResult(_webView?.CoreWebView2?.DocumentTitle ?? string.Empty);
@@ -97,6 +145,24 @@ public class BrowserService : IBrowserService
         {
             await _logger.LogErrorAsync("Toggle media play/pause failed.", ex);
             return false;
+        }
+    }
+
+    private async Task ExecuteScriptWithLoggingAsync(string script, string operation)
+    {
+        if (_webView?.CoreWebView2 is null)
+        {
+            return;
+        }
+
+        try
+        {
+            await _webView.CoreWebView2.ExecuteScriptAsync(script);
+            await _logger.LogInfoAsync($"{operation} executed.");
+        }
+        catch (Exception ex)
+        {
+            await _logger.LogErrorAsync($"{operation} failed.", ex);
         }
     }
 }

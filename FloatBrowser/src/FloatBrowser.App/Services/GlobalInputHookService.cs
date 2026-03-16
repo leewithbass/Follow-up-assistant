@@ -1,5 +1,4 @@
-using System.Diagnostics;
-using System.Runtime.InteropServices;
+using System.Windows.Threading;
 using System.Windows.Interop;
 using FloatBrowser.App.Application;
 using FloatBrowser.App.Domain;
@@ -10,10 +9,8 @@ namespace FloatBrowser.App.Services;
 public class GlobalInputHookService : IGlobalInputHookService
 {
     private readonly Dictionary<int, AppAction> _hotkeys = new();
-    private readonly Dictionary<string, AppAction> _mouseActionMap = new();
     private HwndSource? _source;
-    private IntPtr _mouseHook;
-    private NativeMethods.LowLevelMouseProc? _mouseProc;
+    private Dispatcher? _dispatcher;
 
     public event EventHandler<AppAction>? ActionTriggered;
 
@@ -21,6 +18,7 @@ public class GlobalInputHookService : IGlobalInputHookService
     {
         _source = HwndSource.FromHwnd(windowHandle);
         _source?.AddHook(WndProc);
+        _dispatcher = _source?.Dispatcher;
 
         RegisterHotKey(1, config.Back, AppAction.Back, windowHandle);
         RegisterHotKey(2, config.Forward, AppAction.Forward, windowHandle);
@@ -28,16 +26,8 @@ public class GlobalInputHookService : IGlobalInputHookService
         RegisterHotKey(4, config.ToggleVisibility, AppAction.ToggleVisibility, windowHandle);
         RegisterHotKey(5, config.Home, AppAction.Home, windowHandle);
         RegisterHotKey(6, config.PlayPauseMedia, AppAction.PlayPauseMedia, windowHandle);
-
-        _mouseActionMap["XButton1"] = ParseMouseAction(config.MouseXButton1);
-        _mouseActionMap["XButton2"] = ParseMouseAction(config.MouseXButton2);
-
-        _mouseProc = MouseHookCallback;
-        _mouseHook = NativeMethods.SetWindowsHookEx(NativeMethods.WH_MOUSE_LL, _mouseProc, NativeMethods.GetModuleHandle(Process.GetCurrentProcess().MainModule?.ModuleName), 0);
         return Task.CompletedTask;
     }
-
-    private static AppAction ParseMouseAction(string value) => Enum.TryParse<AppAction>(value, out var action) ? action : AppAction.None;
 
     public Task UnregisterAsync(IntPtr windowHandle)
     {
@@ -50,12 +40,6 @@ public class GlobalInputHookService : IGlobalInputHookService
         if (_source is not null)
         {
             _source.RemoveHook(WndProc);
-        }
-
-        if (_mouseHook != IntPtr.Zero)
-        {
-            NativeMethods.UnhookWindowsHookEx(_mouseHook);
-            _mouseHook = IntPtr.Zero;
         }
 
         return Task.CompletedTask;
@@ -100,7 +84,7 @@ public class GlobalInputHookService : IGlobalInputHookService
             var id = wParam.ToInt32();
             if (_hotkeys.TryGetValue(id, out var action))
             {
-                ActionTriggered?.Invoke(this, action);
+                RaiseActionTriggered(action);
                 handled = true;
             }
         }
@@ -108,26 +92,18 @@ public class GlobalInputHookService : IGlobalInputHookService
         return IntPtr.Zero;
     }
 
-    private IntPtr MouseHookCallback(int nCode, IntPtr wParam, IntPtr lParam)
+    private void RaiseActionTriggered(AppAction action)
     {
-        if (nCode >= 0 && wParam == (IntPtr)NativeMethods.WM_XBUTTONDOWN)
+        if (_dispatcher is not null && !_dispatcher.CheckAccess())
         {
-            var mouseData = Marshal.PtrToStructure<NativeMethods.MSLLHOOKSTRUCT>(lParam).mouseData;
-            var button = ((mouseData >> 16) & 0xffff) == 1 ? "XButton1" : "XButton2";
-            if (_mouseActionMap.TryGetValue(button, out var action) && action != AppAction.None)
-            {
-                ActionTriggered?.Invoke(this, action);
-            }
+            _dispatcher.Invoke(() => ActionTriggered?.Invoke(this, action));
+            return;
         }
-        return NativeMethods.CallNextHookEx(_mouseHook, nCode, wParam, lParam);
+
+        ActionTriggered?.Invoke(this, action);
     }
 
     public void Dispose()
     {
-        if (_mouseHook != IntPtr.Zero)
-        {
-            NativeMethods.UnhookWindowsHookEx(_mouseHook);
-            _mouseHook = IntPtr.Zero;
-        }
     }
 }

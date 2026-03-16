@@ -7,7 +7,7 @@
     "opacity": 1.0
   },
   "browser": {
-    "homeUrl": "https://www.bing.com"
+    "homeUrl": "http://www.bilibili.com"
   },
   "hotkeys": {
     "back": "Alt+Left",
@@ -16,7 +16,7 @@
     "toggleVisibility": "Ctrl+Alt+Space",
     "home": "Ctrl+Alt+H",
     "playPauseMedia": "Ctrl+Alt+P",
-    "mouseXButton1": "PlayPauseMedia",
+    "mouseXButton1": "None",
     "mouseXButton2": "None"
   }
 }
