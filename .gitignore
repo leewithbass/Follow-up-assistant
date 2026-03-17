@@ -1,2 +1,5 @@
 FloatBrowser/src/FloatBrowser.App/bin/
 FloatBrowser/src/FloatBrowser.App/obj/
+dist/
+FloatBrowser/dist/
+*.zip

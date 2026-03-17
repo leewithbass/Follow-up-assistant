@@ -5,6 +5,7 @@ namespace FloatBrowser.App.Interop;
 internal static class NativeMethods
 {
     public const int WM_HOTKEY = 0x0312;
+    public const int WM_APPCOMMAND = 0x0319;
     public const int WM_NCHITTEST = 0x0084;
     public const int WM_NCRBUTTONUP = 0x00A5;
     public const int WM_INITMENUPOPUP = 0x0117;
@@ -31,6 +32,7 @@ internal static class NativeMethods
     public const uint MF_UNCHECKED = 0x00000000;
     public const uint MF_ENABLED = 0x00000000;
     public const uint MF_GRAYED = 0x00000001;
+    public const int APPCOMMAND_MEDIA_PLAY_PAUSE = 14;
 
     [Flags]
     public enum HotKeyModifiers

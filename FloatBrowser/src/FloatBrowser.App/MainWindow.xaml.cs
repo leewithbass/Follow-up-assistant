@@ -276,6 +276,16 @@ public partial class MainWindow : Window
         {
             UpdateSystemMenuState();
         }
+        else if (msg == NativeMethods.WM_APPCOMMAND)
+        {
+            var appCommand = GetAppCommand(lParam);
+            if (appCommand == NativeMethods.APPCOMMAND_MEDIA_PLAY_PAUSE)
+            {
+                handled = true;
+                _ = Dispatcher.InvokeAsync(() => GlobalInputHookService_ActionTriggered(this, AppAction.PlayPauseMedia));
+                return IntPtr.Zero;
+            }
+        }
         else if (msg == NativeMethods.WM_SYSCOMMAND)
         {
             var commandId = (uint)(wParam.ToInt64() & 0xFFF0);
@@ -288,5 +298,10 @@ public partial class MainWindow : Window
         }
 
         return IntPtr.Zero;
+    }
+
+    private static int GetAppCommand(IntPtr lParam)
+    {
+        return (int)((lParam.ToInt64() >> 16) & 0x0FFF);
     }
 }

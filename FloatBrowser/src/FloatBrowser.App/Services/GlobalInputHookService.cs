@@ -67,6 +67,7 @@ public class GlobalInputHookService : IGlobalInputHookService
                 case "left": virtualKey = 0x25; break;
                 case "right": virtualKey = 0x27; break;
                 case "space": virtualKey = 0x20; break;
+                case "mediaplaypause": virtualKey = 0xB3; break;
                 default:
                     if (part.Length == 1)
                     {

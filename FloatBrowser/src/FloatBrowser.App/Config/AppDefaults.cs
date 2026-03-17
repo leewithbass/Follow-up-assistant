@@ -17,7 +17,7 @@ public static class AppDefaults
     public const string DefaultRefreshHotkey = "Ctrl+Alt+R";
     public const string DefaultToggleHotkey = "Ctrl+Alt+Space";
     public const string DefaultHomeHotkey = "Ctrl+Alt+H";
-    public const string DefaultPlayPauseHotkey = "Ctrl+Alt+P";
+    public const string DefaultPlayPauseHotkey = "MediaPlayPause";
     public const string DefaultMouseXButton1 = "None";
     public const string DefaultMouseXButton2 = "None";
 }

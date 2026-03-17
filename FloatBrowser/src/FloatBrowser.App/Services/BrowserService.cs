@@ -131,15 +131,49 @@ public class BrowserService : IBrowserService
             return false;
         }
 
-        const string script = "(() => { try { const media = [...document.querySelectorAll('video, audio')]"
-            + ".find(m => m && m.offsetParent !== null && !m.disabled) || document.querySelector('video, audio');"
-            + " if (!media) return false; if (media.paused) { media.play(); } else { media.pause(); } return true; }"
-            + " catch { return false; } })();";
+        const string script = """
+            (() => {
+              try {
+                const mediaNodes = [...document.querySelectorAll('video, audio')];
+                const preferred = mediaNodes.find(m => !m.paused && !m.ended)
+                  || mediaNodes.find(m => m.readyState > 0)
+                  || mediaNodes[0];
+
+                if (preferred) {
+                  if (preferred.paused) {
+                    const playResult = preferred.play();
+                    if (playResult && typeof playResult.catch === 'function') {
+                      playResult.catch(() => {});
+                    }
+                  } else {
+                    preferred.pause();
+                  }
+                  return true;
+                }
+
+                const activeButton = document.querySelector(
+                  '[aria-label*="暂停"],[aria-label*="播放"],.bpx-player-ctrl-play,.bilibili-player-video-btn-start'
+                );
+                if (activeButton instanceof HTMLElement) {
+                  activeButton.click();
+                  return true;
+                }
+
+                document.dispatchEvent(new KeyboardEvent('keydown', { key: 'MediaPlayPause', code: 'MediaPlayPause', bubbles: true }));
+                document.dispatchEvent(new KeyboardEvent('keyup', { key: 'MediaPlayPause', code: 'MediaPlayPause', bubbles: true }));
+                return false;
+              } catch {
+                return false;
+              }
+            })();
+            """;
 
         try
         {
             var resultJson = await _webView.CoreWebView2.ExecuteScriptAsync(script);
-            return JsonSerializer.Deserialize<bool>(resultJson);
+            var result = JsonSerializer.Deserialize<bool>(resultJson);
+            await _logger.LogInfoAsync($"Browser ToggleMediaPlayPause requested: hasCore=True, currentUrl={_webView.Source}, result={result}");
+            return result;
         }
         catch (Exception ex)
         {

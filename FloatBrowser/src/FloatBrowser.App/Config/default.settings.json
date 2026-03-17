@@ -15,7 +15,7 @@
     "refresh": "Ctrl+Alt+R",
     "toggleVisibility": "Ctrl+Alt+Space",
     "home": "Ctrl+Alt+H",
-    "playPauseMedia": "Ctrl+Alt+P",
+    "playPauseMedia": "MediaPlayPause",
     "mouseXButton1": "None",
     "mouseXButton2": "None"
   }
