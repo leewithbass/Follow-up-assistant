@@ -9,6 +9,11 @@ namespace FloatBrowser.App.Services;
 
 public class BrowserService : IBrowserService
 {
+    private const string DisableBackgroundThrottlingArgs =
+        "--disable-background-timer-throttling " +
+        "--disable-renderer-backgrounding " +
+        "--disable-backgrounding-occluded-windows";
+
     private readonly ILogger _logger;
     private readonly ISettingsService _settingsService;
     private readonly AppConfiguration _config;
@@ -31,8 +36,15 @@ public class BrowserService : IBrowserService
         _webView = webView;
         try
         {
-            var env = await CoreWebView2Environment.CreateAsync(userDataFolder: _settingsService.GetWebViewUserDataFolder());
+            var envOptions = new CoreWebView2EnvironmentOptions
+            {
+                AdditionalBrowserArguments = DisableBackgroundThrottlingArgs
+            };
+            var env = await CoreWebView2Environment.CreateAsync(
+                userDataFolder: _settingsService.GetWebViewUserDataFolder(),
+                options: envOptions);
             await _webView.EnsureCoreWebView2Async(env);
+            await _logger.LogInfoAsync($"WebView2 initialized with browser args: {DisableBackgroundThrottlingArgs}");
             _webView.CoreWebView2.NewWindowRequested += (_, e) =>
             {
                 e.Handled = true;
