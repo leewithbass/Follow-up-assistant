@@ -1,6 +1,8 @@
 FloatBrowser/src/FloatBrowser.App/bin/
 FloatBrowser/src/FloatBrowser.App/obj/
 FloatBrowser/publish/
+FloatBrowser/build.cmd
+FloatBrowser/build.ps1
 dist/
 FloatBrowser/dist/
 *.zip
