@@ -11,7 +11,8 @@ public static class AppDefaults
     public const double DefaultOpacity = 1.0;
     public const double MinOpacity = 0.7;
     public const double MaxOpacity = 1.0;
-    public const string DefaultHomeUrl = "http://www.bilibili.com";
+    public const string DefaultHomeUrl = "app://bookmarks";
+    public const string LegacyDefaultHomeUrl = "http://www.bilibili.com";
     public const string DefaultBackHotkey = "Alt+Left";
     public const string DefaultForwardHotkey = "Alt+Right";
     public const string DefaultRefreshHotkey = "Ctrl+Alt+R";

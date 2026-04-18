@@ -33,7 +33,7 @@ public sealed class AppHost : IDisposable
     public async Task<IBrowserService> CreateBrowserServiceAsync()
     {
         await Task.CompletedTask;
-        return new BrowserService(_logger, SettingsService, Config);
+        return new BrowserService(_logger, SettingsService, BookmarkService, Config);
     }
 
     public async Task ShutdownAsync()

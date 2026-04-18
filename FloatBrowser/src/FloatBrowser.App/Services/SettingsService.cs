@@ -1,5 +1,6 @@
 using System.IO;
 using FloatBrowser.App.Application;
+using FloatBrowser.App.Config;
 using FloatBrowser.App.Domain;
 using FloatBrowser.App.Infrastructure;
 
@@ -25,7 +26,9 @@ public class SettingsService : ISettingsService
         try
         {
             var config = await _storage.ReadAsync<AppConfiguration>(_configPath);
-            return config ?? AppConfiguration.CreateDefault();
+            config ??= AppConfiguration.CreateDefault();
+            MigrateLegacyHomeUrl(config);
+            return config;
         }
         catch (Exception ex)
         {
@@ -58,5 +61,14 @@ public class SettingsService : ISettingsService
         var path = Path.Combine(_appFolder, "WebView2UserData");
         Directory.CreateDirectory(path);
         return path;
+    }
+
+    private static void MigrateLegacyHomeUrl(AppConfiguration config)
+    {
+        if (string.IsNullOrWhiteSpace(config.Browser.HomeUrl) ||
+            string.Equals(config.Browser.HomeUrl, AppDefaults.LegacyDefaultHomeUrl, StringComparison.OrdinalIgnoreCase))
+        {
+            config.Browser.HomeUrl = AppDefaults.DefaultHomeUrl;
+        }
     }
 }

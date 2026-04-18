@@ -1,5 +1,6 @@
 using System.Windows;
 using FloatBrowser.App.Application;
+using FloatBrowser.App.Domain;
 using FloatBrowser.App.ViewModels;
 
 namespace FloatBrowser.App.Views;
@@ -13,19 +14,38 @@ public partial class BookmarksWindow : Window
     {
         InitializeComponent();
         _viewModel = new BookmarksViewModel(bookmarkService);
-        _viewModel.OpenRequested += (_, item) => { SelectedUrl = item.Url; DialogResult = true; };
+        _viewModel.OpenRequested += (_, item) =>
+        {
+            SelectedUrl = item.Url;
+            DialogResult = true;
+        };
         DataContext = _viewModel;
         Loaded += async (_, _) => await _viewModel.InitializeAsync();
     }
 
     private async void OnDelete(object sender, RoutedEventArgs e)
     {
-        if (MessageBox.Show("确认删除该书签吗？", "确认", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
+        var selectedItems = BookmarksGrid.SelectedItems.Cast<BookmarkItem>().ToList();
+        if (selectedItems.Count == 0 && _viewModel.SelectedItem is not null)
         {
-            await _viewModel.DeleteAsync();
+            selectedItems.Add(_viewModel.SelectedItem);
         }
+
+        if (selectedItems.Count == 0)
+        {
+            return;
+        }
+
+        var confirmMessage = selectedItems.Count > 1 ? "Confirm delete selected bookmarks?" : "Confirm delete this bookmark?";
+        if (MessageBox.Show(confirmMessage, "Confirm", MessageBoxButton.YesNo, MessageBoxImage.Question) != MessageBoxResult.Yes)
+        {
+            return;
+        }
+
+        await _viewModel.DeleteSelectedAsync(selectedItems);
     }
 
     private async void OnOpen(object sender, RoutedEventArgs e) => await _viewModel.OpenAsync();
+
     private void OnClose(object sender, RoutedEventArgs e) => Close();
 }

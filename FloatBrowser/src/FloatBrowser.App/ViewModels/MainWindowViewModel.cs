@@ -3,6 +3,7 @@ using System.Text.RegularExpressions;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using FloatBrowser.App.Application;
+using FloatBrowser.App.Config;
 using FloatBrowser.App.Domain;
 
 namespace FloatBrowser.App.ViewModels;
@@ -38,14 +39,22 @@ public partial class MainWindowViewModel : ObservableObject
     public async Task InitializeAsync()
     {
         AddressText = _config.Browser.HomeUrl;
-        await OpenAsync();
+        await HomeAsync();
         await LoadBookmarksAsync();
     }
 
     [RelayCommand]
     public async Task OpenAsync()
     {
-        var url = NormalizeUrl(AddressText);
+        if (string.Equals(AddressText?.Trim(), AppDefaults.DefaultHomeUrl, StringComparison.OrdinalIgnoreCase))
+        {
+            await _browserService.GoHomeAsync();
+            AddressText = AppDefaults.DefaultHomeUrl;
+            StatusMessage = string.Empty;
+            return;
+        }
+
+        var url = NormalizeUrl(AddressText ?? string.Empty);
         if (url is null)
         {
             StatusMessage = "不是有效的网址";
@@ -66,7 +75,13 @@ public partial class MainWindowViewModel : ObservableObject
     [RelayCommand] public Task ForwardAsync() => _browserService.GoForwardAsync();
     [RelayCommand] public Task RefreshAsync() => _browserService.RefreshAsync();
     [RelayCommand] public Task StopAsync() => _browserService.StopAsync();
-    [RelayCommand] public Task HomeAsync() => _browserService.GoHomeAsync();
+    [RelayCommand]
+    public async Task HomeAsync()
+    {
+        await _browserService.GoHomeAsync();
+        AddressText = _config.Browser.HomeUrl;
+        StatusMessage = string.Empty;
+    }
 
     [RelayCommand]
     public async Task AddBookmarkAsync()
@@ -90,7 +105,7 @@ public partial class MainWindowViewModel : ObservableObject
         }
     }
 
-    public static string? NormalizeUrl(string raw)
+    public static string? NormalizeUrl(string? raw)
     {
         if (string.IsNullOrWhiteSpace(raw)) return null;
         var value = raw.Trim();

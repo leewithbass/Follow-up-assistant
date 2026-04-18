@@ -47,4 +47,19 @@ public partial class BookmarksViewModel : ObservableObject
         await _bookmarkService.DeleteAsync(SelectedItem);
         await InitializeAsync();
     }
+
+    public async Task DeleteSelectedAsync(IReadOnlyList<BookmarkItem> selectedItems)
+    {
+        if (selectedItems.Count == 0)
+        {
+            return;
+        }
+
+        foreach (var item in selectedItems)
+        {
+            await _bookmarkService.DeleteAsync(item);
+        }
+
+        await InitializeAsync();
+    }
 }
