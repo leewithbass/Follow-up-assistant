@@ -1,108 +1,101 @@
 # FloatBrowser
 
-FloatBrowser is a lightweight floating browser for Windows desktop scenarios, built with `C# + .NET 8 + WPF + WebView2`.
+FloatBrowser 是一款轻量级的 Windows 桌面悬浮浏览器，基于 `C# + .NET 8 + WPF + WebView2` 构建。
 
-It is designed for quick side browsing while gaming, streaming, multitasking, or monitoring web content.
+专为游戏、直播、多任务处理或监控网页内容时快速侧边浏览而设计。
 
-## Tech Stack
+## 技术栈
 
 - `C#`
 - `.NET 8`
 - `WPF`
 - `Microsoft.Web.WebView2`
 
-## Requirements
+## 环境要求
 
 - Windows 10/11 x64
 - `.NET 8 SDK`
 - WebView2 Runtime
 
-## Current Features
+## 功能特性
 
-- Single-window browser with WebView2
-- Extended system menu actions:
-  - Open URL
-  - Home
-  - Back / Forward
-  - Refresh / Stop
-  - Add bookmark / Bookmarks list
-  - Toggle topmost
-  - Opacity quick set (100/90/80/70)
-  - Settings
-- Global hotkeys (customizable)
-- Local JSON persistence for settings and bookmarks
+- 基于 WebView2 的单窗口浏览器
+- 扩展系统菜单：
+  - 打开 URL
+  - 主页
+  - 后退 / 前进
+  - 刷新 / 停止
+  - 添加书签 / 书签列表
+  - 切换窗口置顶
+  - 快速设置透明度 (100/90/80/70)
+  - 设置
+- 全局热键（可自定义）
+- 本地 JSON 持久化存储（设置与书签）
 
-## Home Page Behavior
+## 主页行为
 
-- Default home URL is `app://bookmarks`
-- On startup, the app opens the bookmarks home page
-- Bookmarks home page supports:
-  - Delete mode
-  - Select all
-  - Delete selected
+- 默认主页 URL 为 `app://bookmarks`
+- 启动时自动打开书签主页
+- 书签主页支持：
+  - 删除模式
+  - 全选
+  - 删除选中
 
-## Bookmark Management
+## 书签管理
 
-- Add bookmark from current page
-- Open bookmark
-- Delete bookmark
-- Multi-select delete in bookmark window
+- 从当前页面添加书签
+- 打开书签
+- 删除书签
+- 书签窗口中支持多选删除
 
-## Data Location
+## 数据存储位置
 
-Runtime data is stored under:
+运行时数据保存在：
 
 `%LocalAppData%\FloatBrowser`
 
-Main files:
+主要文件：
 
-- `settings.json`
-- `bookmarks.json`
-- `floatbrowser.log`
-- `WebView2UserData/`
+- `settings.json` — 设置
+- `bookmarks.json` — 书签
+- `floatbrowser.log` — 日志
+- `WebView2UserData/` — WebView2 用户数据
 
-## Build And Publish
+## 构建与发布
 
-### Recommended (root publish output)
+### 推荐方式（构建输出到根目录 publish）
 
-Run from repository root:
+在仓库根目录运行：
 
 ```powershell
 .\build.cmd
 ```
 
-or:
-
-```powershell
-.\build.ps1
-```
-
-Default publish output directory:
+默认构建输出目录：
 
 `.\publish`
 
-Executable:
+可执行文件：
 
 `.\publish\FloatBrowser.App.exe`
 
-### Manual publish
+### 手动发布
 
 ```powershell
 dotnet publish .\src\FloatBrowser.App\FloatBrowser.App.csproj -c Release -r win-x64 --self-contained false -p:PublishSingleFile=false -o .\publish
 ```
 
-## Packaging
+## 打包
 
-You can package the published output as zip, for example:
+可以将构建输出打包为 zip，例如：
 
 `.\dist\FloatBrowser-vX.Y.Z-win-x64.zip`
 
-## Notes
+## 说明
 
-- This is a Windows desktop app. It cannot run directly as a Linux GUI app in WSL.
-- User settings in `%LocalAppData%\FloatBrowser\settings.json` take precedence over defaults.
+- 这是 Windows 桌面应用，无法在 WSL 中作为 Linux GUI 程序直接运行。
+- 用户设置文件 `%LocalAppData%\FloatBrowser\settings.json` 优先级高于默认配置。
 
-## License
+## 许可证
 
-See repository root `LICENSE`.
-
+参见仓库根目录 `LICENSE`。
