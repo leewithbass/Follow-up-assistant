@@ -1,8 +1,5 @@
-FloatBrowser/src/FloatBrowser.App/bin/
-FloatBrowser/src/FloatBrowser.App/obj/
-FloatBrowser/publish/
-FloatBrowser/build.cmd
-FloatBrowser/build.ps1
+src/FloatBrowser.App/bin/
+src/FloatBrowser.App/obj/
+publish/
 dist/
-FloatBrowser/dist/
 *.zip
